@@ -1,0 +1,618 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ghauri Command Generator</title>
+  <!-- Bootstrap 5 CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+  body {
+    background: #050505;
+    color: #c7f9d6;
+    font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    padding: 24px;
+  }
+  .card {
+    background: linear-gradient(180deg, rgba(10,14,16,0.95), rgba(5,8,10,0.95));
+    border: 1px solid rgba(0,180,120,0.08);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.5);
+  }
+  .card-header {
+    background: transparent;
+    border-bottom: none;
+    color: #7ef7b0;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+  }
+  .form-label {
+    color: #9fffcf;
+  }
+  .form-control, .form-select {
+    background: rgba(0,0,0,0.35);
+    color: #d8ffe6;
+    border: 1px solid rgba(0,180,120,0.08);
+  }
+  .btn-custom {
+    width: 100%; /* Full-width within col-6 */
+    color: #c7f9d6; /* Bright green text */
+    font-weight: 700;
+    font-size: 1.1rem;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    transition: transform 0.2s ease, background 0.2s ease;
+    box-shadow: 0 4px 10px rgba(0,180,120,0.3);
+  }
+  .btn-custom:hover {
+    background: linear-gradient(90deg, #20c55a, #28d96a); /* Lighter green gradient */
+    transform: scale(1.02);
+  }
+  .btn-copy-command {
+    width: 100%;
+    background: linear-gradient(90deg, #18b14a, #20c55a);
+    color: #c7f9d6;
+    font-weight: 700;
+    font-size: 1.1rem;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    transition: transform 1s ease, background 1s ease;
+    box-shadow: 0 4px 10px rgba(0,180,120,0.3);
+  }
+  .btn-copy-command:hover {
+    background: linear-gradient(90deg, #20c55a, #28d96a);
+    transform: scale(1.02);
+  }
+  .btn-copy-command.copied {
+    background: linear-gradient(90deg, #148f3b, #1ca34b); /* Darker green for "Copied!" */
+    transition: background 0.3s ease;
+  }
+  .output-area {
+    background: rgba(0,0,0,0.5);
+    color: #aafbdb;
+    padding: 14px;
+    border: 1px dashed rgba(0,180,120,0.12);
+    min-height: 56px;
+    font-family: "Courier New", monospace;
+    word-break: break-all;
+  }
+  .muted {
+    color: #7ea28f;
+    font-size: .9rem;
+  }
+  .small-checkbox {
+    transform: scale(1.05);
+    margin-right: 6px;
+  }
+  footer {
+    text-align: center;
+    color: #6dbe9a;
+    margin-top: 24px;
+    font-size: 0.85rem;
+  }
+  @media (min-width: 992px) {
+    .grid-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+  }
+  ::placeholder {
+    color: #ffffff !important;
+    opacity: 1;
+  }
+  .form-control:focus,
+  .form-select:focus,
+  textarea:focus {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    border-color: #18b14a !important;
+    box-shadow: 0 0 6px rgba(24, 177, 74, 0.6) !important;
+    color: #ffffff !important;
+  }
+  .checkbox-inline {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+  }
+  .checkbox-inline .form-check {
+    margin: 0;
+  }
+  .form-select {
+    background-color: rgba(0,0,0,0.35) !important;
+    color: #d8ffe6 !important;
+    border: 1px solid rgba(0,180,120,0.08) !important;
+  }
+  .form-select:focus {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    color: #ffffff !important;
+    border-color: #18b14a !important;
+    box-shadow: 0 0 6px rgba(24, 177, 74, 0.6) !important;
+  }
+  .row.g-2 .col .form-control {
+    width: 100%;
+  }
+  .row.g-2 .col .form-label {
+    margin-bottom: 0.25rem;
+    font-size: 0.9rem;
+  }
+</style>
+</head>
+<body>
+
+  <div class="container">
+    <h2 class="mb-3 text-center">Ghauri Command Generator</h2>
+
+    <!-- Grid layout -->
+    <div class="grid-col mb-3">
+
+      <!-- Left column stack -->
+      <div>
+        <!-- General -->
+        <div class="card mb-3">
+        <div class="card-header">General</div>
+        <div class="card-body checkbox-inline">
+            <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="opt_version" value="--version">
+            <label class="form-check-label form-label" for="opt_version">--version</label>
+            </div>
+            <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="opt_update" value="--update">
+            <label class="form-check-label form-label" for="opt_update">--update</label>
+            </div>
+            <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="opt_batch" value="--batch">
+            <label class="form-check-label form-label" for="opt_batch">--batch</label>
+            </div>
+            <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="opt_flush" value="--flush-session">
+            <label class="form-check-label form-label" for="opt_flush">--flush-session</label>
+            </div>
+            <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="opt_fresh" value="--fresh-queries">
+            <label class="form-check-label form-label" for="opt_fresh">--fresh-queries</label>
+            </div>
+        </div>
+        </div>
+
+        <!-- Target -->
+        <div class="card mb-3">
+          <div class="card-header">Target</div>
+          <div class="card-body">
+            <div class="mb-2">
+              <label class="form-label">Target URL (-u / --url)</label>
+              <input type="text" id="url" class="form-control" placeholder="http://example.com/vuln.php?id=1">
+            </div>
+            <div class="mb-2">
+              <label class="form-label">Bulk file (-m)</label>
+              <input type="text" id="bulkfile" class="form-control" placeholder="targets.txt">
+            </div>
+            <div>
+              <label class="form-label">Request file (-r)</label>
+              <input type="text" id="requestfile" class="form-control" placeholder="request.txt (raw HTTP)">
+            </div>
+          </div>
+        </div>
+
+        <!-- Request -->
+        <div class="card mb-3">
+        <div class="card-header">Request</div>
+        <div class="card-body">
+            <div class="mb-2">
+            <label class="form-label">User-Agent (-A / --user-agent)</label>
+            <input type="text" id="useragent" class="form-control" placeholder="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36">
+            </div>
+            <div class="mb-2 form-check">
+            <input type="checkbox" id="random_agent" class="form-check-input small-checkbox" />
+            <label class="form-check-label form-label" for="random_agent">--random-agent</label>
+            </div>
+            <div class="mb-2">
+            <label class="form-label">Header (-H / --header)</label>
+            <input type="text" id="header" class="form-control" placeholder='X-Forwarded-For: 127.0.0.1'>
+            </div>
+            <div class="mb-2">
+            <label class="form-label">Extra headers (--headers)</label>
+            <textarea id="headers" class="form-control" rows="2" placeholder="Accept-Language: fr\nETag: 123"></textarea>
+            </div>
+            <div class="mb-2">
+            <label class="form-label">Data (--data)</label>
+            <input type="text" id="postdata" class="form-control" placeholder="id=1&user=admin">
+            </div>
+            <div class="mb-2">
+            <label class="form-label">Cookie (--cookie)</label>
+            <input type="text" id="cookie" class="form-control" placeholder="PHPSESSID=abc123">
+            </div>
+            <div class="row g-2 mb-2">
+            <div class="col">
+                <label class="form-label">Referer (--referer)</label>
+                <input type="text" id="referer" class="form-control" placeholder="https://ref.example/">
+            </div>
+            <div class="col">
+                <label class="form-label">Host (--host)</label>
+                <input type="text" id="host" class="form-control" placeholder="example.com">
+            </div>
+            <div class="col">
+                <label class="form-label">Proxy (--proxy)</label>
+                <input type="text" id="proxy" class="form-control" placeholder="http://127.0.0.1:8080">
+            </div>
+            </div>
+            <div class="row g-2 mb-2">
+            <div class="col">
+                <label class="form-label">Delay (--delay)</label>
+                <input type="number" id="delay" min="0" class="form-control" placeholder="0">
+            </div>
+            <div class="col">
+                <label class="form-label">Timeout (--timeout)</label>
+                <input type="number" id="timeout" min="1" class="form-control" value="30">
+            </div>
+            <div class="col">
+                <label class="form-label">Retries (--retries)</label>
+                <input type="number" id="retries" min="0" class="form-control" value="3">
+            </div>
+            </div>
+            <div class="d-flex gap-4 mt-2">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="confirm" value="--confirm">
+                <label class="form-check-label form-label" for="confirm">--confirm</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="skip_urlencode" value="--skip-urlencode">
+                <label class="form-check-label form-label" for="skip_urlencode">--skip-urlencode</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="force_ssl" value="--force-ssl">
+                <label class="form-check-label form-label" for="force_ssl">--force-ssl</label>
+            </div>
+            </div>
+        </div>
+        </div>
+
+        <!-- Optimization -->
+        <div class="card mb-3">
+          <div class="card-header">Optimization</div>
+          <div class="card-body">
+            <div class="mb-2">
+              <label class="form-label">Threads (--threads)</label>
+              <input type="number" id="threads" class="form-control" value="1" min="1" max="50">
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right column stack -->
+      <div>
+        <!-- Injection -->
+        <div class="card mb-3">
+        <div class="card-header">Injection</div>
+        <div class="card-body">
+            <div class="row g-2 mb-2">
+            <div class="col">
+                <label class="form-label">Test parameter (-p)</label>
+                <input type="text" id="testparam" class="form-control" placeholder="id or id,otherparam">
+            </div>
+            <div class="col">
+                <label class="form-label">DBMS (--dbms)</label>
+                <input type="text" id="dbms" class="form-control" placeholder="mysql/postgresql/mssql">
+            </div>
+            <div class="col">
+                <label class="form-label">Prefix (--prefix)</label>
+                <input type="text" id="prefix" class="form-control" placeholder="prefix">
+            </div>
+            </div>
+            <div class="row g-2 mb-2">
+            <div class="col">
+                <label class="form-label">Suffix (--suffix)</label>
+                <input type="text" id="suffix" class="form-control" placeholder="suffix">
+            </div>
+            <div class="col">
+                <label class="form-label">Safe chars (--safe-chars)</label>
+                <input type="text" id="safechars" class="form-control" placeholder='[] or "%"'>
+            </div>
+            <div class="col">
+                <label class="form-label">Fetch using (--fetch-using)</label>
+                <input type="text" id="fetchusing" class="form-control" placeholder="between/in">
+            </div>
+            </div>
+            <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="confirm_payloads" value="--confirm">
+            <label class="form-check-label form-label" for="confirm_payloads">Confirm injected payloads (--confirm)</label>
+            </div>
+        </div>
+        </div>
+
+        <!-- Detection -->
+        <div class="card mb-3">
+        <div class="card-header">Detection</div>
+        <div class="card-body">
+            <div class="row g-2 mb-2">
+            <div class="col">
+                <label class="form-label">Verbosity (-v)</label>
+                <input type="number" id="verbosity" class="form-control" value="1" min="0" max="5">
+            </div>
+            <div class="col">
+                <label class="form-label">Level (--level)</label>
+                <input type="number" id="level" class="form-control" value="1" min="1" max="5">
+            </div>
+            <div class="col">
+                <label class="form-label">Match HTTP code (--code)</label>
+                <input type="text" id="code" class="form-control" placeholder="200">
+            </div>
+            </div>
+            <div class="row g-2 mb-2">
+            <div class="col">
+                <label class="form-label">String to match (--string)</label>
+                <input type="text" id="matchstring" class="form-control" placeholder="Welcome">
+            </div>
+            <div class="col">
+                <label class="form-label">Not string (--not-string)</label>
+                <input type="text" id="notstring" class="form-control" placeholder="Error">
+            </div>
+            </div>
+            <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="text_only" value="--text-only">
+            <label class="form-check-label form-label" for="text_only">--text-only (compare textual content)</label>
+            </div>
+        </div>
+        </div>
+
+        <!-- Techniques -->
+        <div class="card mb-3">
+        <div class="card-header">Techniques</div>
+        <div class="card-body checkbox-inline">
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="tech_B" value="B">
+            <label class="form-check-label form-label" for="tech_B">Boolean-based (B)</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="tech_E" value="E">
+            <label class="form-check-label form-label" for="tech_E">Error-based (E)</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="tech_U" value="U">
+            <label class="form-check-label form-label" for="tech_U">Union-based (U)</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="tech_S" value="S">
+            <label class="form-check-label form-label" for="tech_S">Stacked queries (S)</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="tech_T" value="T">
+            <label class="form-check-label form-label" for="tech_T">Time-based blind (T)</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="tech_Q" value="Q">
+            <label class="form-check-label form-label" for="tech_Q">Inline queries (Q)</label>
+        </div>
+        </div>
+        <div class="card-body">
+            <label class="form-label">Time delay (--time-sec)</label>
+            <input type="number" id="time_sec" class="form-control" value="5" min="1">
+        </div>
+        </div>
+
+        <!-- Enumeration -->
+        <div class="card mb-3">
+        <div class="card-header">Enumeration</div>
+        <div class="card-body checkbox-inline">
+            <div class="form-check"><input class="form-check-input" type="checkbox" id="banner" value="--banner"><label class="form-check-label form-label" for="banner">--banner</label></div>
+            <div class="form-check"><input class="form-check-input" type="checkbox" id="current_user" value="--current-user"><label class="form-check-label form-label" for="current_user">--current-user</label></div>
+            <div class="form-check"><input class="form-check-input" type="checkbox" id="current_db" value="--current-db"><label class="form-check-label form-label" for="current_db">--current-db</label></div>
+            <div class="form-check"><input class="form-check-input" type="checkbox" id="hostname" value="--hostname"><label class="form-check-label form-label" for="hostname">--hostname</label></div>
+            <div class="form-check"><input class="form-check-input" type="checkbox" id="dbs" value="--dbs"><label class="form-check-label form-label" for="dbs">--dbs</label></div>
+            <div class="form-check"><input class="form-check-input" type="checkbox" id="tables" value="--tables"><label class="form-check-label form-label" for="tables">--tables</label></div>
+            <div class="form-check"><input class="form-check-input" type="checkbox" id="columns" value="--columns"><label class="form-check-label form-label" for="columns">--columns</label></div>
+            <div class="form-check"><input class="form-check-input" type="checkbox" id="count" value="--count"><label class="form-check-label form-label" for="count">--count</label></div>
+            <div class="form-check"><input class="form-check-input" type="checkbox" id="dump" value="--dump"><label class="form-check-label form-label" for="dump">--dump</label></div>
+            <div class="form-check"><input class="form-check-input" type="checkbox" id="sqlshell" value="--sql-shell"><label class="form-check-label form-label" for="sqlshell">--sql-shell</label></div>
+        </div>
+        <div class="card-body">
+            <div class="row g-2">
+                <div class="col">
+                <label class="form-label">Database (-D)</label>
+                <input type="text" id="enum_db" class="form-control" placeholder="example_db">
+                </div>
+                <div class="col">
+                <label class="form-label">Table (-T)</label>
+                <input type="text" id="enum_table" class="form-control" placeholder="users">
+                </div>
+            </div>
+            <div class="mt-2">
+                <label class="form-label">Columns (-C)</label>
+                <input type="text" id="enum_cols" class="form-control" placeholder="id,username,password">
+            </div>
+            </div>
+        </div>
+
+        <!-- Advanced -->
+        <div class="card mb-3">
+          <div class="card-header">Advanced</div>
+          <div class="card-body">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="test_filter" value="--test-filter">
+              <label class="form-check-label form-label" for="test_filter">--test-filter (select test payloads by title)</label>
+            </div>
+            <div class="mb-2 mt-2">
+              <label class="form-label">Custom tamper/test (-) (free text)</label>
+              <input type="text" id="custom_extra" class="form-control" placeholder="Any extra flags or scripts">
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Generate -->
+    <div class="card">
+    <div class="row g-2 mb-3">
+        <div class="col-6">
+        <button id="generateBtn" class="btn btn-custom">Generate Command</button>
+        </div>
+        <div class="col-6">
+        <button id="resetBtn" class="btn btn-custom">Reset</button>
+        </div>
+    </div>
+    <div class="card-body">
+        <div id="generated" class="output-area">ghauri command will appear here...</div>
+        <div class="mt-3">
+        <button id="copyBtn" class="btn btn-copy-command">Copy Command</button>
+        </div>
+    </div>
+    </div>
+
+     <footer class="text-center developer-footer">
+    <h5 class="fw-bold">Developed by</h5>
+    <p class="fs-5 mb-3">Mijanur Rahman</p>
+    <div class="social-icons">
+        <a href="https://www.linkedin.com/in/mijanhaque/" target="_blank" class="mx-2"><i class="fab fa-linkedin fa-2x"></i></a>
+        <a href="https://x.com/mijanhaque_" target="_blank" class="mx-2"><i class="fab fa-twitter fa-2x"></i></a>
+        <a href="https://github.com/h6nt3r" target="_blank" class="mx-2"><i class="fab fa-github fa-2x"></i></a>
+        <a href="https://www.facebook.com/mijanhaqueofficial/" target="_blank" class="mx-2"><i class="fab fa-facebook fa-2x"></i></a>
+    </div>
+</footer>
+  </div>
+
+  <!-- Bootstrap JS and dependencies -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+  function shellEscape(s) {
+    if (!s && s !== 0) return '';
+    s = String(s);
+    if (/^[a-zA-Z0-9_\/:.-]+$/.test(s)) return s;
+    return "'" + s.replace(/'/g, "'\\''") + "'";
+  }
+
+  function gatherOptions() {
+    const parts = ['ghauri'];
+
+    // General
+    if (document.getElementById('opt_version').checked) parts.push('--version');
+    if (document.getElementById('opt_update').checked) parts.push('--update');
+    if (document.getElementById('opt_batch').checked) parts.push('--batch');
+    if (document.getElementById('opt_flush').checked) parts.push('--flush-session');
+    if (document.getElementById('opt_fresh').checked) parts.push('--fresh-queries');
+
+    // Target
+    const url = document.getElementById('url').value.trim();
+    const bulk = document.getElementById('bulkfile').value.trim();
+    const rfile = document.getElementById('requestfile').value.trim();
+    if (url) parts.push('-u', shellEscape(url));
+    if (bulk) parts.push('-m', shellEscape(bulk));
+    if (rfile) parts.push('-r', shellEscape(rfile));
+
+    // Request
+    if (document.getElementById('useragent').value.trim()) {
+      parts.push('-A', shellEscape(document.getElementById('useragent').value.trim()));
+    }
+    if (document.getElementById('random_agent').checked) parts.push('--random-agent');
+    if (document.getElementById('header').value.trim()) parts.push('-H', shellEscape(document.getElementById('header').value.trim()));
+    if (document.getElementById('headers').value.trim()) parts.push('--headers', shellEscape(document.getElementById('headers').value.trim()));
+    if (document.getElementById('postdata').value.trim()) parts.push('--data', shellEscape(document.getElementById('postdata').value.trim()));
+    if (document.getElementById('cookie').value.trim()) parts.push('--cookie', shellEscape(document.getElementById('cookie').value.trim()));
+    if (document.getElementById('referer').value.trim()) parts.push('--referer', shellEscape(document.getElementById('referer').value.trim()));
+    if (document.getElementById('host').value.trim()) parts.push('--host', shellEscape(document.getElementById('host').value.trim()));
+    if (document.getElementById('proxy').value.trim()) parts.push('--proxy', shellEscape(document.getElementById('proxy').value.trim()));
+    if (document.getElementById('delay').value) parts.push('--delay', String(document.getElementById('delay').value));
+    if (document.getElementById('timeout').value) parts.push('--timeout', String(document.getElementById('timeout').value));
+    if (document.getElementById('retries').value) parts.push('--retries', String(document.getElementById('retries').value));
+    if (document.getElementById('confirm').checked) parts.push('--confirm');
+    if (document.getElementById('skip_urlencode').checked) parts.push('--skip-urlencode');
+    if (document.getElementById('force_ssl').checked) parts.push('--force-ssl');
+
+    // Optimization
+    if (document.getElementById('threads').value) parts.push('--threads', String(document.getElementById('threads').value));
+
+    // Injection
+    if (document.getElementById('testparam').value.trim()) parts.push('-p', shellEscape(document.getElementById('testparam').value.trim()));
+    if (document.getElementById('dbms').value.trim()) parts.push('--dbms', shellEscape(document.getElementById('dbms').value.trim()));
+    if (document.getElementById('prefix') && document.getElementById('prefix').value.trim()) parts.push('--prefix', shellEscape(document.getElementById('prefix').value.trim()));
+    if (document.getElementById('suffix') && document.getElementById('suffix').value.trim()) parts.push('--suffix', shellEscape(document.getElementById('suffix').value.trim()));
+    if (document.getElementById('safechars').value.trim()) parts.push('--safe-chars', shellEscape(document.getElementById('safechars').value.trim()));
+    if (document.getElementById('fetchusing').value.trim()) parts.push('--fetch-using', shellEscape(document.getElementById('fetchusing').value.trim()));
+
+    // Detection
+    if (document.getElementById('verbosity').value) parts.push('-v', String(document.getElementById('verbosity').value));
+    if (document.getElementById('level').value) parts.push('--level', document.getElementById('level').value);
+    if (document.getElementById('code').value.trim()) parts.push('--code', shellEscape(document.getElementById('code').value.trim()));
+    if (document.getElementById('matchstring').value.trim()) parts.push('--string', shellEscape(document.getElementById('matchstring').value.trim()));
+    if (document.getElementById('notstring').value.trim()) parts.push('--not-string', shellEscape(document.getElementById('notstring').value.trim()));
+    if (document.getElementById('text_only').checked) parts.push('--text-only');
+
+    // Techniques
+    const techFlags = [];
+    ['B','E','U','S','T','Q'].forEach(t => {
+      const el = document.getElementById('tech_' + t);
+      if (el && el.checked) techFlags.push(t);
+    });
+    if (techFlags.length > 0) parts.push('--technique', techFlags.join(''));
+    if (document.getElementById('time_sec').value) {
+      parts.push('--time-sec', String(document.getElementById('time_sec').value));
+    }
+
+    // Enumeration
+    ['banner','current_user','current_db','hostname','dbs','tables','columns','count','dump','sqlshell'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el && el.checked) parts.push(el.value);
+    });
+    if (document.getElementById('enum_db').value.trim()) parts.push('-D', shellEscape(document.getElementById('enum_db').value.trim()));
+    if (document.getElementById('enum_table').value.trim()) parts.push('-T', shellEscape(document.getElementById('enum_table').value.trim()));
+    if (document.getElementById('enum_cols').value.trim()) parts.push('-C', shellEscape(document.getElementById('enum_cols').value.trim()));
+
+    // Advanced
+    if (document.getElementById('test_filter').checked) parts.push('--test-filter');
+    if (document.getElementById('custom_extra').value.trim()) {
+      const extras = document.getElementById('custom_extra').value.trim();
+      parts.push(extras);
+    }
+
+    return parts.join(' ');
+  }
+
+  document.getElementById('generateBtn').addEventListener('click', function() {
+    const cmd = gatherOptions();
+    document.getElementById('generated').textContent = cmd;
+  });
+
+  document.getElementById('copyBtn').addEventListener('click', async function() {
+    const text = document.getElementById('generated').textContent;
+    try {
+      await navigator.clipboard.writeText(text);
+      this.textContent = 'Copied!';
+      setTimeout(() => this.textContent = 'Copy Command', 1500);
+    } catch (e) {
+      alert('Copy failed. Select and copy manually.');
+    }
+  });
+
+  document.getElementById('resetBtn').addEventListener('click', function() {
+    document.querySelectorAll('input').forEach(i => {
+      if (i.type === 'checkbox' || i.type === 'radio') i.checked = false;
+      else if (i.type === 'number' || i.type === 'text') i.value = '';
+    });
+    document.querySelectorAll('textarea').forEach(t => t.value = '');
+    document.querySelectorAll('select').forEach(s => {
+      if (s.multiple) Array.from(s.options).forEach(o => o.selected = false);
+      else s.selectedIndex = 0;
+    });
+    document.getElementById('threads').value = '1';
+    document.getElementById('verbosity').value = '1';
+    document.getElementById('timeout').value = '30';
+    document.getElementById('retries').value = '3';
+    document.getElementById('time_sec').value = '5';
+    document.getElementById('generated').textContent = 'ghauri command will appear here...';
+  });
+
+  // Prefill example + defaults
+  (function prefill(){
+    document.getElementById('url').value = 'http://example.com/vuln.php?id=1';
+    document.getElementById('threads').value = '1';
+    document.getElementById('verbosity').value = '1';
+    document.getElementById('timeout').value = '30';
+    document.getElementById('retries').value = '3';
+    document.getElementById('time_sec').value = '5';
+  })();
+</script>
+</body>
+</html>
