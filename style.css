@@ -1,0 +1,163 @@
+body {
+	background: #222831;
+	color: #ffffff;
+	font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial;
+	padding: 24px;
+}
+.gcg {
+  text-align: center;
+  font-size: 50px;
+  text-decoration: dotted underline;
+}
+.card {
+	background: #393E46;
+	border: 1px solid rgba(0,180,120,0.3);
+	box-shadow: 0px 1px 104px -2px rgba(0,0,0,1);
+    -webkit-box-shadow: 0px 1px 104px -2px rgba(0,0,0,1);
+    -moz-box-shadow: 0px 1px 104px -2px rgba(0,0,0,1);
+}
+
+.card-header {
+    background: transparent;
+    border-bottom: none;
+    color: #008040 !important;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    font-size: 30px !important;
+}
+/* Optional: Make the main page title larger for hierarchy */
+h2.text-center {
+    font-size: 30px !important;
+    margin-bottom: 30px !important;
+}
+.form-label {
+	color: #fff !important;
+	font-weight: 600;
+}
+.form-control, .form-control:disabled, .form-select, .form-select:disabled {
+    background: linear-gradient(180deg, rgba(10,14,16,0.95), rgba(5,8,10,0.95));
+    color: #ffffff;
+    border: 1px solid rgba(0,180,120,0.12);
+    box-shadow: none !important;
+}
+
+.form-control:focus, .form-select:focus {
+    background: linear-gradient(180deg, rgba(10,14,16,0.95), rgba(5,8,10,0.95));
+    color: #ffffff;
+    border-color: rgba(0,180,120,0.6);
+    box-shadow: 0 0 0 0.25rem rgba(0,180,120,0.25) !important;
+}
+
+/* Checkbox and Radio buttons */
+.form-check-input:checked {
+    background-color: #00b478;
+    border-color: #00b478;
+    box-shadow: 0 0 0 0.25rem rgba(0,180,120,0.25);
+}
+.form-check-input:focus {
+    box-shadow: none;
+}
+
+/* Custom button styles */
+.btn-custom {
+    width: 100%;
+    background: linear-gradient(90deg, #1d9545, #177033);
+    color: #fff;
+    font-weight: 700;
+    font-size: 1.1rem;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    transition: transform 0.2s ease;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.btn-custom:hover {
+    transform: translateY(-2px);
+    background: linear-gradient(90deg, #177033, #1d9545);
+}
+
+.btn-custom:active {
+    transform: translateY(1px);
+}
+
+/* Specific copy button style */
+.btn-copy-command {
+    width: 100%;
+    background: linear-gradient(90deg, #18b14a, #20c55a);
+    color: #c7f9d6;
+    font-weight: 700;
+    font-size: 1.1rem;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    transition: transform 1s ease, background 1s ease;
+    box-shadow: 0 4px 10px rgba(0,180,120,0.3);
+}
+
+.btn-copy-command:hover {
+    background: linear-gradient(90deg, #20c55a, #28d96a);
+    transform: scale(1.02);
+}
+
+.btn-copy-command.copied {
+    background: linear-gradient(90deg, #148f3b, #1ca34b);
+    transition: background 0.3s ease;
+}
+
+/* Output area */
+.output-area {
+    background: rgba(0,0,0,0.5);
+    color: #aafbdb;
+    padding: 14px;
+    border: 1px dashed rgba(0,180,120,0.12);
+    min-height: 56px;
+    font-family: "Courier New", monospace;
+    word-break: break-all;
+}
+
+/* Checkbox inline layout */
+.checkbox-inline {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+/* Grid for main content */
+.grid-col {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+/* Developer footer */
+.developer-footer {
+  margin-top: 4rem;
+  border-top: 1px solid rgba(0,180,120,0.1);
+}
+
+.developer-footer h5, .developer-footer p, .developer-footer a {
+  color: #88ffbb;
+}
+
+.social-icons a {
+  color: #88ffbb;
+  transition: color 0.2s ease;
+}
+
+.social-icons a:hover {
+  color: #c7f9d6;
+}
+
+/* Override Bootstrap disabled state for input */
+input:disabled, textarea:disabled {
+  background-color: rgba(0,0,0,0.5) !important;
+  color: #e0e0e0 !important;
+  border-color: rgba(0,180,120,0.05) !important;
+  cursor: not-allowed;
+}
+
+/* Placeholder text color */
+::placeholder {
+    color: #747373 !important;
+}
